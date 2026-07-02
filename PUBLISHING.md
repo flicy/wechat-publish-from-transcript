@@ -8,41 +8,17 @@
 
 ```bash
 python3 ~/.codex/skills/.system/skill-creator/scripts/quick_validate.py .
-python3 - <<'PY'
-from pathlib import Path
-patterns = [
-    "b" + "aoyu",
-    "宝" + "玉",
-    "post" + "-to-" + "wechat",
-    "BAO" + "YU",
-    "BAO" + "_YU",
-    "Growth" + "OS",
-    "/" + "Users/",
-]
-hits = []
-for path in Path(".").rglob("*"):
-    if ".git" in path.parts or not path.is_file():
-        continue
-    text = path.read_text(errors="ignore")
-    for pattern in patterns:
-        if pattern in text:
-            hits.append((path.as_posix(), pattern))
-if hits:
-    for path, pattern in hits:
-        print(f"{path}: contains {pattern}")
-    raise SystemExit(1)
-print("no private publisher names, local paths, or old brand defaults found")
-PY
-find . -name ".DS_Store" -print
+python3 scripts/check_public_ready.py .
 bash -n scripts/submit_wechat_draft.sh
+python3 -m unittest discover -s tests
 ```
 
 期望结果：
 
 - Skill 校验输出 `Skill is valid!`
-- `rg` 没有命中个人、私有发布器或本机路径。
-- `find` 没有输出 `.DS_Store`。
+- 公开发布检查输出 `public-ready check passed`。
 - Shell 语法检查无输出并返回成功。
+- 单元测试输出 `OK`。
 
 ### 创建 GitHub 仓库并推送
 
@@ -79,41 +55,17 @@ Before publishing publicly, run these commands from the repository root:
 
 ```bash
 python3 ~/.codex/skills/.system/skill-creator/scripts/quick_validate.py .
-python3 - <<'PY'
-from pathlib import Path
-patterns = [
-    "b" + "aoyu",
-    "宝" + "玉",
-    "post" + "-to-" + "wechat",
-    "BAO" + "YU",
-    "BAO" + "_YU",
-    "Growth" + "OS",
-    "/" + "Users/",
-]
-hits = []
-for path in Path(".").rglob("*"):
-    if ".git" in path.parts or not path.is_file():
-        continue
-    text = path.read_text(errors="ignore")
-    for pattern in patterns:
-        if pattern in text:
-            hits.append((path.as_posix(), pattern))
-if hits:
-    for path, pattern in hits:
-        print(f"{path}: contains {pattern}")
-    raise SystemExit(1)
-print("no private publisher names, local paths, or old brand defaults found")
-PY
-find . -name ".DS_Store" -print
+python3 scripts/check_public_ready.py .
 bash -n scripts/submit_wechat_draft.sh
+python3 -m unittest discover -s tests
 ```
 
 Expected results:
 
 - Skill validation prints `Skill is valid!`.
-- `rg` finds no personal, private-publisher, or local-machine path references.
-- `find` prints no `.DS_Store` files.
+- Public readiness check prints `public-ready check passed`.
 - Shell syntax check prints nothing and exits successfully.
+- Unit tests print `OK`.
 
 ### Create The GitHub Repository And Push
 

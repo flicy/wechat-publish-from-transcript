@@ -1,0 +1,27 @@
+name: Validate Skill
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Validate public readiness
+        run: python3 scripts/check_public_ready.py .
+
+      - name: Check shell syntax
+        run: bash -n scripts/submit_wechat_draft.sh
+
+      - name: Run unit tests
+        run: python3 -m unittest discover -s tests
