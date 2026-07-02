@@ -32,7 +32,7 @@ gh repo create wechat-publish-from-transcript --public --source . --remote origi
 如果已经在 GitHub 上创建了空仓库：
 
 ```bash
-git remote add origin git@github.com:<owner>/wechat-publish-from-transcript.git
+git remote add origin https://github.com/<owner>/wechat-publish-from-transcript.git
 git push -u origin main
 ```
 
@@ -79,7 +79,7 @@ gh repo create wechat-publish-from-transcript --public --source . --remote origi
 If you already created an empty GitHub repository:
 
 ```bash
-git remote add origin git@github.com:<owner>/wechat-publish-from-transcript.git
+git remote add origin https://github.com/<owner>/wechat-publish-from-transcript.git
 git push -u origin main
 ```
 
