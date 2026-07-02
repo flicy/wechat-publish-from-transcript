@@ -1,0 +1,10 @@
+interface:
+  display_name: "Transcript to WeChat"
+  short_description: "逐字稿生成公众号、配图 Prompt 与跨平台内容包"
+  icon_small: "./assets/icon.svg"
+  icon_large: "./assets/icon.svg"
+  brand_color: "#E6532E"
+  default_prompt: "Use $wechat-publish-from-transcript to turn this transcript into a WeChat article, highlight scorecard, image plan, Image 2.0/GPT Image prompt pack, WeChat draft payload, Xiaohongshu post, and social content pack."
+
+policy:
+  allow_implicit_invocation: true

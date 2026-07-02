@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 400 400" role="img" aria-label="Transcript to WeChat skill icon">
+  <rect width="400" height="400" rx="72" fill="#151515"/>
+  <path d="M96 92h208c20 0 36 16 36 36v116c0 20-16 36-36 36H180l-56 48c-8 7-20 1-20-10v-38h-8c-20 0-36-16-36-36V128c0-20 16-36 36-36Z" fill="#fff"/>
+  <path d="M122 142h156" stroke="#E6532E" stroke-width="18" stroke-linecap="round"/>
+  <path d="M122 190h112" stroke="#11845B" stroke-width="18" stroke-linecap="round"/>
+  <path d="M122 238h156" stroke="#151515" stroke-width="18" stroke-linecap="round"/>
+</svg>

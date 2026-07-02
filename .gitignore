@@ -1,0 +1,10 @@
+.DS_Store
+.env
+.env.*
+*.log
+tmp/
+outputs/
+generated_images/
+node_modules/
+__pycache__/
+*.pyc
