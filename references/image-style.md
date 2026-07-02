@@ -33,7 +33,7 @@
 
 ### 参考图比例
 
-用户提供的 GrowthOS 横版参考图通常接近 `1080 x 608`。学习这些比例：
+用户提供的品牌/项目横版参考图通常接近 `1080 x 608`。学习这些比例：
 
 - 主标题字高约占画布高度 `10%-14%`。
 - 副标题字高约占 `3.5%-5%`。
@@ -52,7 +52,7 @@
 
 平台通常不会给“配图字体字号表”。因此本 Skill 使用画布高度比例和用户参考图比例作为设计约束。
 
-### GrowthOS 参考风格
+### 参考图风格
 
 - 背景：米白纸质、轻微颗粒。
 - 边角：橙色/黑色撕纸、胶带、网格/点阵碎片。
@@ -63,7 +63,7 @@
 
 ### 公众号标题主色同步
 
-公众号文章标题块和生成图片必须使用同一主色。默认主色为 GrowthOS 橙红 `#E6532E`；如果图片套图换成绿色、蓝色或其他主色，文章标题块的左侧强调色也必须同步切换。
+公众号文章标题块和生成图片必须使用同一主色。默认主色为橙红 `#E6532E`；如果图片套图换成绿色、蓝色或其他主色，文章标题块的左侧强调色也必须同步切换。
 
 标题块采用用户截图式样：
 
@@ -214,7 +214,7 @@ Preserve the user standard: clear visual expression, suitable for Xiaohongshu, n
 
 ### Reference Ratios
 
-For GrowthOS-style landscape references around `1080 x 608`:
+For brand-style landscape references around `1080 x 608`:
 
 - Main title glyph height: about `10%-14%` of canvas height.
 - Subtitle glyph height: about `3.5%-5%`.
@@ -233,7 +233,7 @@ Do not infer the reference style as "make the title huge." The quality comes fro
 
 Platforms usually do not provide a useful illustration font-size table. This skill therefore uses canvas-height ratios and user reference-image ratios as design constraints.
 
-### GrowthOS Reference Style
+### Reference Style
 
 - Background: warm off-white paper with subtle grain.
 - Edges: orange/black torn paper, tape, grid/dot scraps.
@@ -244,7 +244,7 @@ Platforms usually do not provide a useful illustration font-size table. This ski
 
 ### WeChat Title Accent Color
 
-The WeChat article title block and generated images must share the same dominant accent color. Default GrowthOS accent is orange-red `#E6532E`. If the image set uses green, blue, or another dominant accent, the article title block's left accent bar must use the same color.
+The WeChat article title block and generated images must share the same dominant accent color. The default accent is orange-red `#E6532E`. If the image set uses green, blue, or another dominant accent, the article title block's left accent bar must use the same color.
 
 Use the screenshot-style title block:
 

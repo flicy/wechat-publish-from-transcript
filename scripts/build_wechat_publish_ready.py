@@ -20,7 +20,7 @@ IMAGE_BY_COMMENT_HINT = {
     "配图 08": "08-mvp-validation.png",
     "配图 09": "09-multidimensional-competition.png",
     "配图 10": "10-feedback-flywheel.png",
-    "配图 11": "11-growthos-cta.png",
+    "配图 11": "11-community-cta.png",
 }
 
 
@@ -35,7 +35,7 @@ ALT_BY_IMAGE = {
     "08-mvp-validation.png": "MVP 验证",
     "09-multidimensional-competition.png": "避开单一维度竞争",
     "10-feedback-flywheel.png": "反馈闭环",
-    "11-growthos-cta.png": "GrowthOS 活动说明",
+    "11-community-cta.png": "社群活动说明",
 }
 
 
@@ -76,14 +76,14 @@ def replace_image_comments(article: str, run_dir: Path, md_dir: Path) -> str:
 
 
 def maybe_insert_cta(article: str, run_dir: Path, md_dir: Path) -> str:
-    cta = run_dir / "assets" / "final" / "wechat" / "11-growthos-cta.png"
-    if not cta.exists() or "11-growthos-cta.png" in article:
+    cta = run_dir / "assets" / "final" / "wechat" / "11-community-cta.png"
+    if not cta.exists() or "11-community-cta.png" in article:
         return article
     marker = "如果你也在做 AI 产品、出海增长、独立开发，或者只是有一个想验证的想法，欢迎继续关注后续活动。"
     if marker not in article:
         return article
     rel = Path("..") / cta.relative_to(run_dir)
-    return article.replace(marker, f"![GrowthOS 活动说明]({rel.as_posix()})\n\n{marker}")
+    return article.replace(marker, f"![社群活动说明]({rel.as_posix()})\n\n{marker}")
 
 
 def main() -> None:
@@ -91,7 +91,7 @@ def main() -> None:
     parser.add_argument("--run-dir", required=True, type=Path)
     parser.add_argument("--article", default="article-publish.md")
     parser.add_argument("--out", default="wechat/publish-ready.md")
-    parser.add_argument("--author", default="GrowthOS")
+    parser.add_argument("--author", default="Publisher")
     parser.add_argument("--title")
     parser.add_argument("--summary")
     args = parser.parse_args()

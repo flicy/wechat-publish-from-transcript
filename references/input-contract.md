@@ -27,7 +27,7 @@
 - 图片风格参考
 - 用户偏好的公众号/小红书参考图
 - 活动名称、期数、嘉宾简介
-- GrowthOS 社群说明
+- 社群、项目或品牌说明
 - 小红书或 X 分发偏好
 
 ### 输入处理规则
@@ -66,7 +66,7 @@ If timestamps exist, preserve them. If not, continue highlight extraction and ma
 - Image style references
 - User-preferred WeChat/Xiaohongshu reference images
 - Event name, issue number, speaker bios
-- GrowthOS community description
+- Community, project, or brand description
 - Xiaohongshu or X distribution preference
 
 ### Input Handling Rules

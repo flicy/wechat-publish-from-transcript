@@ -22,7 +22,7 @@
 - 配图系统升级：每篇文章必须有 `00-overview-recap` 总回顾图。
 - 设计规范升级：公众号第一张图固定为 `2.35:1` 封面图；章节图标题区 12%-18%，封面标题区最多 20%-28%，小红书标题区 14%-22%。
 - 公众号标题样式升级：文章标题块和图片主色保持一致，采用左侧主色条 + 浅色底的截图式标题样式。
-- 参考图学习升级：保留 GrowthOS 米白纸、橙黑撕纸、手绘信息图、3D 泥塑协作者的风格。
+- 参考图学习升级：保留用户提供参考图中的米白纸、橙黑撕纸、手绘信息图、3D 泥塑协作者等可复用风格特征。
 - 图片来源升级：必须记录图片来源、模型路径或本地排版方式。不能无依据声称使用了某个具体模型。
 - 发布链路升级：新增 `build_wechat_publish_ready.py` 和 `submit_wechat_draft.sh`。
 - 内容确认升级：提交草稿前必须检查标题、摘要、封面、图片、姓名、二维码、密钥和评论设置。
@@ -92,7 +92,7 @@
 - Image system: every article includes a `00-overview-recap` whole-session image.
 - Design spec: the first WeChat image is a fixed `2.35:1` cover; WeChat chapter title zone 12%-18%, cover title zone at most 20%-28%, Xiaohongshu title zone 14%-22%.
 - WeChat title style: article title blocks and images share the same accent color, using a screenshot-like left accent bar plus pale background.
-- Reference-style learning: preserves GrowthOS off-white paper, orange/black torn-paper collage, hand-drawn infographics, and 3D clay collaborator figures.
+- Reference-style learning: preserves reusable traits from user-provided references, such as off-white paper, orange/black torn-paper collage, hand-drawn infographics, and 3D clay collaborator figures.
 - Image provenance: every run records image source, model path, or local typography/composition method. Do not claim a model without verifiable evidence.
 - Publishing pipeline: adds `build_wechat_publish_ready.py` and `submit_wechat_draft.sh`.
 - Content confirmation: title, summary, cover, images, names, QR codes, secrets, and comment settings must be checked before draft submission.
