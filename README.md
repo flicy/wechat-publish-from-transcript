@@ -8,6 +8,7 @@
 ![Python](https://img.shields.io/badge/Python-3.x-blue)
 ![WeChat](https://img.shields.io/badge/WeChat-Draft-green)
 ![Bilingual Docs](https://img.shields.io/badge/Docs-ZH%20%2B%20EN-lightgrey)
+[![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](./LICENSE)
 
 ## 中文
 
@@ -137,12 +138,26 @@ wechat-publish-from-transcript/
 ├── SKILL.md
 ├── README.md
 ├── PUBLISHING.md
+├── LICENSE
+├── skill.yml
 ├── agents/
 ├── assets/
 ├── references/
 ├── scripts/
 └── tests/
 ```
+
+## 相关 Skill
+
+| Skill | 用途 |
+|---|---|
+| [enterprise-company-research-agent](https://github.com/flicy/enterprise-company-research-agent) | 企业供应商、公司与产品深度调研 |
+| [prepare-livestream-event](https://github.com/flicy/prepare-livestream-event) | 筹备线上直播活动，生成海报、文案和发布清单 |
+| [publish-skill-to-github](https://github.com/flicy/publish-skill-to-github) | 把本地 Skill 包发布到 GitHub |
+
+## 许可证
+
+MIT — 见 [LICENSE](./LICENSE)
 
 ## English
 
@@ -266,9 +281,23 @@ wechat-publish-from-transcript/
 ├── SKILL.md
 ├── README.md
 ├── PUBLISHING.md
+├── LICENSE
+├── skill.yml
 ├── agents/
 ├── assets/
 ├── references/
 ├── scripts/
 └── tests/
 ```
+
+## Related Skills
+
+| Skill | Purpose |
+|---|---|
+| [enterprise-company-research-agent](https://github.com/flicy/enterprise-company-research-agent) | Enterprise supplier, company, and product research |
+| [prepare-livestream-event](https://github.com/flicy/prepare-livestream-event) | Prepare livestream event launches with posters, copy, and publishing checklists |
+| [publish-skill-to-github](https://github.com/flicy/publish-skill-to-github) | Publish local Skill packages to GitHub |
+
+## License
+
+MIT — see [LICENSE](./LICENSE)
