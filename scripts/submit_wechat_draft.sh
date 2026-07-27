@@ -15,6 +15,8 @@ if [[ ! -f "$PUBLISH_READY" ]]; then
   exit 2
 fi
 
+ARTICLE_HTML="$RUN_DIR/wechat/article.html"
+
 PUBLISHER_SCRIPT="${WECHAT_PUBLISHER_SCRIPT:-}"
 
 if [[ -z "$PUBLISHER_SCRIPT" ]]; then
@@ -46,6 +48,16 @@ if [[ -z "$PUBLISHER_SCRIPT" ]]; then
     fi
     IMAGE_COUNT="$(grep -Ec '^!\[[^]]*\]\([^)]+\)' "$PUBLISH_READY" || true)"
 
+    if [[ -f "$ARTICLE_HTML" ]]; then
+      if python3 "$(dirname "$0")/validate_gzh_html.py" "$ARTICLE_HTML" >/dev/null 2>&1; then
+        TYPESET_STATUS="present, 0 ERROR"
+      else
+        TYPESET_STATUS="present, HAS ERRORS (run scripts/validate_gzh_html.py)"
+      fi
+    else
+      TYPESET_STATUS="missing (run the typeset stage first)"
+    fi
+
     echo "local dry-run only: no WECHAT_PUBLISHER_SCRIPT configured"
     echo "publish-ready: $PUBLISH_READY"
     echo "title: ${TITLE:-unknown}"
@@ -53,11 +65,12 @@ if [[ -z "$PUBLISHER_SCRIPT" ]]; then
     echo "digest: ${DIGEST:-unknown}"
     echo "cover: ${COVER:-unknown}"
     echo "inline images: $IMAGE_COUNT"
+    echo "typeset html: $TYPESET_STATUS"
     exit 0
   fi
 
   echo "missing WeChat publisher adapter; set WECHAT_PUBLISHER_SCRIPT to a local script that accepts:" >&2
-  echo "  <publish-ready.md> --theme default [--dry-run]" >&2
+  echo "  <publish-ready.md> --theme default [--html <article.html>] [--dry-run]" >&2
   exit 2
 fi
 
@@ -94,6 +107,9 @@ case "$PUBLISHER_SCRIPT" in
 esac
 
 ARGS=("$PUBLISH_READY" --theme default)
+if [[ -f "$ARTICLE_HTML" ]]; then
+  ARGS+=(--html "$ARTICLE_HTML")
+fi
 if [[ "$MODE" == "--dry-run" ]]; then
   ARGS+=(--dry-run)
 fi

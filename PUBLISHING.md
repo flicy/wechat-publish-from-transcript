@@ -4,48 +4,50 @@
 
 ### 发布前检查
 
-在公开发布前，从仓库根目录运行：
+在公开前，从仓库根目录运行这些命令：
 
 ```bash
 python3 ~/.codex/skills/.system/skill-creator/scripts/quick_validate.py .
 python3 scripts/check_public_ready.py .
+python3 scripts/component_lint.py
 bash -n scripts/submit_wechat_draft.sh
 python3 -m unittest discover -s tests
 ```
 
-期望结果：
+预期结果：
 
-- Skill 校验输出 `Skill is valid!`
-- 公开发布检查输出 `public-ready check passed`。
-- Shell 语法检查无输出并返回成功。
-- 单元测试输出 `OK`。
+- Skill 验证打印 `Skill is valid!`
+- 公开就绪检查打印 `public-ready check passed`。
+- 组件库检查打印 `全部组件库源头无反模式`。
+- Shell 语法检查没有输出并成功退出。
+- 单元测试打印 `OK`。
 
 ### 创建 GitHub 仓库并推送
 
-如果 GitHub CLI 已登录，可以直接创建公开仓库并推送：
+如果 GitHub CLI 已认证，创建公开仓库并推送：
 
 ```bash
 gh auth status
 gh repo create wechat-publish-from-transcript --public --source . --remote origin --push
 ```
 
-如果已经在 GitHub 上创建了空仓库：
+如果已经创建空 GitHub 仓库：
 
 ```bash
 git remote add origin https://github.com/<owner>/wechat-publish-from-transcript.git
 git push -u origin main
 ```
 
-把 `<owner>` 替换成你的 GitHub 用户名或组织名。
+把 `<owner>` 替换成你的 GitHub 用户名或组织。
 
 ### 发布后检查
 
 发布后确认：
 
-- GitHub 首页能看到 `README.md`。
-- `SKILL.md`、`references/`、`scripts/`、`assets/` 和 `agents/` 都已上传。
-- 仓库中没有密钥、Cookie、Token、二维码原图或个人发布器名称。
-- 如需允许他人复用，选择并添加许可证文件，例如 MIT、Apache-2.0 或其他你认可的许可证。
+- GitHub 首页渲染 `README.md`。
+- `SKILL.md`、`references/`、`scripts/`、`assets/` 和 `agents/` 已上传。
+- 仓库不含秘密、cookie、token、二维码源图片或个人发布者名字。
+- 如果其他人应该被允许复用该包，选择并添加许可文件，例如 MIT、Apache-2.0 或你批准的许可。
 
 ## English
 
@@ -56,6 +58,7 @@ Before publishing publicly, run these commands from the repository root:
 ```bash
 python3 ~/.codex/skills/.system/skill-creator/scripts/quick_validate.py .
 python3 scripts/check_public_ready.py .
+python3 scripts/component_lint.py
 bash -n scripts/submit_wechat_draft.sh
 python3 -m unittest discover -s tests
 ```
@@ -64,6 +67,7 @@ Expected results:
 
 - Skill validation prints `Skill is valid!`.
 - Public readiness check prints `public-ready check passed`.
+- Component lint prints that all component libraries are clean.
 - Shell syntax check prints nothing and exits successfully.
 - Unit tests print `OK`.
 

@@ -1,0 +1,5 @@
+# Runtime dependencies for the optional script helpers.
+# The typesetting validators (validate_gzh_html.py, component_lint.py,
+# wrap_preview.py) and build_wechat_publish_ready.py use only the stdlib.
+# Pillow is required by the image helpers: compose_qrcode_card.py, validate_assets.py
+Pillow>=10.0

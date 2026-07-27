@@ -1,42 +1,45 @@
 #!/usr/bin/env python3
-"""Build a WeChat publish-ready markdown file from a transcript run directory."""
+"""Build a WeChat publish-ready markdown file from a transcript run directory.
+
+Topic-agnostic. Image mapping is dynamic: each ``<!-- 图片 NN ... -->`` placeholder
+is matched to an image in ``assets/final/wechat/`` whose filename starts with the
+same zero-padded index (e.g. ``图片 02`` -> ``02-*.png``). Alt text comes from an
+optional inline hint (``<!-- 图片 02 三种方法 -->``) or is derived from the slug.
+A referenced image that is missing is a HARD ERROR (exit 1), never a silent skip.
+
+Index 01 is reserved for the cover (emitted as frontmatter ``coverImage``, not
+inline). A ``<!-- CTA -->`` marker, if present, is replaced with the community QR
+image (``--cta`` path, or auto-discovered as ``*cta*`` in the wechat image dir).
+"""
 
 from __future__ import annotations
 
 import argparse
+import os
 import re
+import sys
 from pathlib import Path
 
-
-IMAGE_BY_COMMENT_HINT = {
-    "配图 00": "00-overview-recap.png",
-    "配图 01": None,
-    "配图 02": "02-three-methods.png",
-    "配图 03": "03-comment-capture.png",
-    "配图 04": "04-geo-network.png",
-    "配图 05": "05-geo-workflow.png",
-    "配图 06": "06-kol-funnel.png",
-    "配图 07": "07-platform-choice.png",
-    "配图 08": "08-mvp-validation.png",
-    "配图 09": "09-multidimensional-competition.png",
-    "配图 10": "10-feedback-flywheel.png",
-    "配图 11": "11-community-cta.png",
-}
+IMAGE_EXTS = (".png", ".jpg", ".jpeg", ".webp")
 
 
-ALT_BY_IMAGE = {
-    "00-overview-recap.png": "总回顾：一图读懂本场讨论",
-    "02-three-methods.png": "出海增长三板斧",
-    "03-comment-capture.png": "评论区获客",
-    "04-geo-network.png": "GEO：让 AI 更容易引用你",
-    "05-geo-workflow.png": "GEO 不是玄学",
-    "06-kol-funnel.png": "红人营销漏斗",
-    "07-platform-choice.png": "平台选择",
-    "08-mvp-validation.png": "MVP 验证",
-    "09-multidimensional-competition.png": "避开单一维度竞争",
-    "10-feedback-flywheel.png": "反馈闭环",
-    "11-community-cta.png": "社群活动说明",
-}
+def humanize_slug(filename: str) -> str:
+    stem = Path(filename).stem
+    stem = re.sub(r"^\d+[-_]?", "", stem)  # strip leading index like "02-"
+    return stem.replace("-", " ").replace("_", " ").strip() or filename
+
+
+def find_image_by_index(image_dir: Path, index: int) -> Path | None:
+    """Match an image whose stem equals NN or starts with NN- / NN_."""
+    if not image_dir.is_dir():
+        return None
+    prefix = f"{index:02d}"
+    for f in sorted(image_dir.iterdir()):
+        if f.suffix.lower() not in IMAGE_EXTS:
+            continue
+        if f.stem == prefix or f.stem.startswith(prefix + "-") or f.stem.startswith(prefix + "_"):
+            return f
+    return None
 
 
 def read_front_title(article: str) -> str:
@@ -45,7 +48,7 @@ def read_front_title(article: str) -> str:
 
 
 def read_summary(article: str) -> str:
-    quote = re.search(r"^>\s+(.+)$", article, re.MULTILINE)
+    quote = re.search(r"^>\s+(.*)$", article, re.MULTILINE)
     if quote:
         return quote.group(1).strip()[:120]
     for line in article.splitlines():
@@ -55,45 +58,51 @@ def read_summary(article: str) -> str:
     return ""
 
 
-def replace_image_comments(article: str, run_dir: Path, md_dir: Path) -> str:
-    image_dir = run_dir / "assets" / "final" / "wechat"
+def relpath(target: Path, base: Path) -> str:
+    return Path(os.path.relpath(target, base)).as_posix()
 
+
+def replace_image_comments(article: str, image_dir: Path, md_dir: Path,
+                           cover_index: int, missing: list[str]) -> str:
     def repl(match: re.Match[str]) -> str:
-        comment = match.group(0)
-        for hint, filename in IMAGE_BY_COMMENT_HINT.items():
-            if hint in comment:
-                if filename is None:
-                    return ""
-                image_path = image_dir / filename
-                if not image_path.exists():
-                    return comment
-                rel = image_path.relative_to(md_dir) if image_path.is_relative_to(md_dir) else Path("..") / image_path.relative_to(run_dir)
-                alt = ALT_BY_IMAGE.get(filename, filename)
-                return f"![{alt}]({rel.as_posix()})"
-        return comment
+        index = int(match.group(1))
+        hint = (match.group(2) or "").strip()
+        if index == cover_index:
+            return ""  # cover is emitted in frontmatter, not inline
+        img = find_image_by_index(image_dir, index)
+        if img is None:
+            missing.append(f"图片 {index:02d}（assets/final/wechat/ 里没有 {index:02d}-* 图）")
+            return match.group(0)
+        alt = hint or humanize_slug(img.name)
+        return f"![{alt}]({relpath(img, md_dir)})"
 
-    return re.sub(r"<!--\s*配图\s+\d+.*?-->", repl, article)
+    return re.sub(r"<!--\s*图片\s+(\d+)\s*(.*?)-->", repl, article)
 
 
-def maybe_insert_cta(article: str, run_dir: Path, md_dir: Path) -> str:
-    cta = run_dir / "assets" / "final" / "wechat" / "11-community-cta.png"
-    if not cta.exists() or "11-community-cta.png" in article:
+def insert_cta(article: str, image_dir: Path, md_dir: Path, cta_arg: str | None) -> str:
+    if "<!-- CTA -->" not in article:
         return article
-    marker = "如果你也在做 AI 产品、出海增长、独立开发，或者只是有一个想验证的想法，欢迎继续关注后续活动。"
-    if marker not in article:
-        return article
-    rel = Path("..") / cta.relative_to(run_dir)
-    return article.replace(marker, f"![社群活动说明]({rel.as_posix()})\n\n{marker}")
+    cta: Path | None = Path(cta_arg) if cta_arg else None
+    if cta is None and image_dir.is_dir():
+        cands = sorted(p for p in image_dir.iterdir()
+                       if "cta" in p.stem.lower() and p.suffix.lower() in IMAGE_EXTS)
+        cta = cands[0] if cands else None
+    if cta is None or not cta.exists():
+        return article.replace("<!-- CTA -->", "")
+    return article.replace("<!-- CTA -->", f"![社群二维码]({relpath(cta, md_dir)})")
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--run-dir", required=True, type=Path)
     parser.add_argument("--article", default="article-publish.md")
     parser.add_argument("--out", default="wechat/publish-ready.md")
     parser.add_argument("--author", default="Publisher")
     parser.add_argument("--title")
     parser.add_argument("--summary")
+    parser.add_argument("--cover-index", type=int, default=1,
+                        help="image index reserved for the cover (default 1)")
+    parser.add_argument("--cta", help="explicit community QR image path for <!-- CTA -->")
     args = parser.parse_args()
 
     run_dir = args.run_dir.resolve()
@@ -101,15 +110,27 @@ def main() -> None:
     out_path = run_dir / args.out
     md_dir = out_path.parent
     md_dir.mkdir(parents=True, exist_ok=True)
+    image_dir = run_dir / "assets" / "final" / "wechat"
 
-    article = article_path.read_text()
-    article = replace_image_comments(article, run_dir, md_dir)
-    article = maybe_insert_cta(article, run_dir, md_dir)
+    if not article_path.exists():
+        raise SystemExit(f"Article not found: {article_path}")
 
-    cover = run_dir / "assets" / "final" / "wechat" / "01-cover.png"
-    if not cover.exists():
-        raise SystemExit(f"Missing cover image: {cover}")
-    cover_rel = Path("..") / cover.relative_to(run_dir)
+    article = article_path.read_text(encoding="utf-8")
+
+    missing: list[str] = []
+    article = replace_image_comments(article, image_dir, md_dir, args.cover_index, missing)
+    article = insert_cta(article, image_dir, md_dir, args.cta)
+
+    if missing:
+        sys.stderr.write("❌ 以下占位图缺失，无法生成 publish-ready：\n")
+        for m in missing:
+            sys.stderr.write(f"   • {m}\n")
+        raise SystemExit(1)
+
+    cover = find_image_by_index(image_dir, args.cover_index)
+    if cover is None:
+        raise SystemExit(
+            f"Missing cover image: no {args.cover_index:02d}-* image in {image_dir}")
 
     title = args.title or read_front_title(article)
     summary = args.summary or read_summary(article)
@@ -118,10 +139,10 @@ def main() -> None:
         f'title: "{title}"\n'
         f'author: "{args.author}"\n'
         f'summary: "{summary}"\n'
-        f'coverImage: "{cover_rel.as_posix()}"\n'
+        f'coverImage: "{relpath(cover, md_dir)}"\n'
         "---\n\n"
     )
-    out_path.write_text(frontmatter + article)
+    out_path.write_text(frontmatter + article, encoding="utf-8")
     print(out_path)
 
 

@@ -1,30 +1,30 @@
 name: wechat-publish-from-transcript
-version: 1.0.0
+version: 1.1.0
 type: instruction-skill
 entry: SKILL.md
 license: MIT
 summary:
-  zh: 把逐字稿变成微信公众号文章、配图 Prompt、小红书帖子和跨平台内容包。
-  en: Turn transcripts into WeChat articles, image prompts, Xiaohongshu posts, and cross-platform content packs.
+  zh: 把转写稿做成微信文章、可直接粘贴的公众号排版 HTML、图片 Prompt、微信草稿载荷和跨平台社交内容包。
+  en: Turn transcripts into WeChat articles, paste-ready typeset HTML, image prompts, Xiaohongshu posts, and cross-platform content packs.
 description:
-  zh: 覆盖高光提取、证据映射、文章结构、配图计划、微信草稿提交、小红书帖子生成和跨平台资产沉淀。
-  en: Covers highlight extraction, evidence mapping, article structure, image planning, WeChat draft submission, Xiaohongshu post generation, and cross-platform asset handoff.
+  zh: 覆盖亮点提取、证据映射、文章结构、图片规划、公众号正文排版（主题系统 + 双关卡校验）、微信草稿提交、小红书帖子生成和跨平台资产交接。
+  en: Covers highlight extraction, evidence mapping, article structure, image planning, WeChat body typesetting (theme system + dual-gate validation), WeChat draft submission, Xiaohongshu post generation, and cross-platform asset handoff.
 inputs:
   - name: transcript
     required: true
     description:
-      zh: 原始逐字稿（访谈、直播、会议、课程、播客或视频）。
+      zh: 原始转写稿（访谈、直播、会议、课程、播客或视频）。
       en: Raw transcript from an interview, livestream, meeting, course, podcast, or video.
   - name: platform_highlight_screenshots
     required: false
     description:
-      zh: 微信或视频平台的高光截图（最多在线、最高评论率、最高留存率）。
+      zh: 微信或视频平台亮点截图（最多观看、最高评论率、最高留存）。
       en: Optional WeChat or video platform highlight screenshots (most viewers, highest comment rate, highest retention).
 outputs:
   - name: publishing_assets
     description:
-      zh: 公众号文章、配图 Prompt 包、微信草稿输入稿、小红书帖子、跨平台内容包和发布报告。
-      en: WeChat article, image prompt pack, WeChat draft payload, Xiaohongshu post, cross-platform content pack, and publish report.
+      zh: 微信文章、可粘贴的排版 HTML（wechat/article.html）、图片 Prompt 包、微信草稿载荷、小红书帖子、跨平台内容包和发布报告。
+      en: WeChat article, paste-ready typeset HTML (wechat/article.html), image prompt pack, WeChat draft payload, Xiaohongshu post, cross-platform content pack, and publish report.
 permissions:
   network: optional
   filesystem: required
@@ -34,3 +34,5 @@ tags:
   - content-publishing
   - xiaohongshu
   - cross-platform
+  - typesetting
+  - gongzhonghao
